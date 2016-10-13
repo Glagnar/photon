@@ -1,0 +1,31 @@
+// Only include One of the following depending on your environment!
+#include <spark-dallas-temperature.h>  // Use this include for the Web IDE:
+
+DallasTemperature dallas(new OneWire(D0));
+
+// Save result in float
+float celsius = 0;
+
+// This is called once, on startup
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Alexandra Institute TEMPERATURE tester");
+  dallas.begin();
+}
+
+// This loop is called continuously
+void loop(void) {
+  Serial.println("Reading from temperature... ");
+  dallas.requestTemperatures();
+
+  celsius = dallas.getTempCByIndex( 0 );
+
+  if (celsius > -120) {
+    Serial.printlnf("Found temperature: %f" , celsius);
+  } else {
+    Serial.printlnf("There was a problem, perhaps nothing was connected: %d" , dallas.getDeviceCount());
+  }
+
+  // Add some busy wait
+  delay(2000);
+}
